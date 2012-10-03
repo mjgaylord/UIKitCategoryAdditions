@@ -19,24 +19,45 @@ static UIViewController *_presentVC;
                      message:(NSString*) message
                      buttons:(NSArray*) buttonTitles
                   showInView:(UIView*) view
-                   onDismiss:(DismissBlock) dismissed                   
+                   onDismiss:(DismissBlock) dismissed
                     onCancel:(CancelBlock) cancelled
-{    
-    [UIActionSheet actionSheetWithTitle:title 
-                                message:message 
-                 destructiveButtonTitle:nil 
-                                buttons:buttonTitles 
-                             showInView:view 
-                              onDismiss:dismissed 
+{
+    [UIActionSheet actionSheetWithTitle:title
+                                message:message
+                 destructiveButtonTitle:nil
+                                buttons:buttonTitles
+                             showInView:view
+                              onDismiss:dismissed
                                onCancel:cancelled];
 }
 
-+ (void) actionSheetWithTitle:(NSString*) title                     
-                      message:(NSString*) message          
++ (void) actionSheetWithTitle:(NSString*) title
+                      message:(NSString*) message
        destructiveButtonTitle:(NSString*) destructiveButtonTitle
                       buttons:(NSArray*) buttonTitles
                    showInView:(UIView*) view
-                    onDismiss:(DismissBlock) dismissed                   
+                    onDismiss:(DismissBlock) dismissed
+                     onCancel:(CancelBlock) cancelled
+{
+	
+	NSString *cancelButtonTitle = NSLocalizedString(@"Cancel", @"");
+    [self actionSheetWithTitle:title
+					   message:message
+		destructiveButtonTitle:destructiveButtonTitle
+			 cancelButtonTitle:cancelButtonTitle
+					   buttons:buttonTitles
+					showInView:view
+					 onDismiss:dismissed
+					  onCancel:cancelled];
+}
+
++ (void) actionSheetWithTitle:(NSString*) title
+                      message:(NSString*) message
+       destructiveButtonTitle:(NSString*) destructiveButtonTitle
+			cancelButtonTitle:(NSString *) cancelButtonTitle
+                      buttons:(NSArray*) buttonTitles
+                   showInView:(UIView*) view
+                    onDismiss:(DismissBlock) dismissed
                      onCancel:(CancelBlock) cancelled
 {
     [_cancelBlock release];
@@ -44,11 +65,11 @@ static UIViewController *_presentVC;
     
     [_dismissBlock release];
     _dismissBlock  = [dismissed copy];
-
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:title 
-                                                             delegate:(id <UIActionSheetDelegate>)[self class] 
+	
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:title
+                                                             delegate:(id <UIActionSheetDelegate>)[self class]
                                                     cancelButtonTitle:nil
-                                               destructiveButtonTitle:destructiveButtonTitle 
+                                               destructiveButtonTitle:destructiveButtonTitle
                                                     otherButtonTitles:nil];
     
     for(NSString* thisButtonTitle in buttonTitles)
@@ -73,10 +94,11 @@ static UIViewController *_presentVC;
     
 }
 
+
 + (void) photoPickerWithTitle:(NSString*) title
                    showInView:(UIView*) view
                     presentVC:(UIViewController*) presentVC
-                onPhotoPicked:(PhotoPickedBlock) photoPicked                   
+                onPhotoPicked:(PhotoPickedBlock) photoPicked
                      onCancel:(CancelBlock) cancelled
 {
     [_cancelBlock release];
@@ -89,13 +111,13 @@ static UIViewController *_presentVC;
     _presentVC = [presentVC retain];
     
     int cancelButtonIndex = -1;
-
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:title 
-                                                             delegate:(id <UIActionSheetDelegate>)[self class] 
+	
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:title
+                                                             delegate:(id <UIActionSheetDelegate>)[self class]
 													cancelButtonTitle:nil
 											   destructiveButtonTitle:nil
 													otherButtonTitles:nil];
-
+	
 	if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
 	{
 		[actionSheet addButtonWithTitle:NSLocalizedString(@"Camera", @"")];
@@ -111,8 +133,8 @@ static UIViewController *_presentVC;
 	cancelButtonIndex ++;
 	
     actionSheet.tag = kPhotoActionSheetTag;
-	actionSheet.cancelButtonIndex = cancelButtonIndex;		 
-
+	actionSheet.cancelButtonIndex = cancelButtonIndex;
+	
 	if([view isKindOfClass:[UIView class]])
         [actionSheet showInView:view];
     
@@ -122,7 +144,7 @@ static UIViewController *_presentVC;
     if([view isKindOfClass:[UIBarButtonItem class]])
         [actionSheet showFromBarButtonItem:(UIBarButtonItem*) view animated:YES];
     
-    [actionSheet release];    
+    [actionSheet release];
 }
 
 
@@ -133,7 +155,7 @@ static UIViewController *_presentVC;
         editedImage = (UIImage*) [info valueForKey:UIImagePickerControllerOriginalImage];
     
     _photoPickedBlock(editedImage);
-	[picker dismissModalViewControllerAnimated:YES];	
+	[picker dismissModalViewControllerAnimated:YES];
 	[picker autorelease];
 }
 
@@ -141,7 +163,7 @@ static UIViewController *_presentVC;
 + (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     // Dismiss the image selection and close the program
-    [_presentVC dismissModalViewControllerAnimated:YES];    
+    [_presentVC dismissModalViewControllerAnimated:YES];
 	[picker autorelease];
     [_presentVC release];
     _cancelBlock();
@@ -171,8 +193,8 @@ static UIViewController *_presentVC;
             picker.delegate = (id <UINavigationControllerDelegate, UIImagePickerControllerDelegate>)[self class];
             picker.allowsEditing = YES;
             
-            if(buttonIndex == 1) 
-            {                
+            if(buttonIndex == 1)
+            {
                 picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
             }
             else if(buttonIndex == 2)

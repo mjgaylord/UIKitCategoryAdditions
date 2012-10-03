@@ -33,4 +33,14 @@
                 onPhotoPicked:(PhotoPickedBlock) photoPicked                   
                      onCancel:(CancelBlock) cancelled;
 
++ (void) actionSheetWithTitle:(NSString*) title
+                      message:(NSString*) message
+       destructiveButtonTitle:(NSString*) destructiveButtonTitle
+			cancelButtonTitle:(NSString *) cancelButtonTitle
+                      buttons:(NSArray*) buttonTitles
+                   showInView:(UIView*) view
+                    onDismiss:(DismissBlock) dismissed
+                     onCancel:(CancelBlock) cancelled;
+
+
 @end
