@@ -24,4 +24,6 @@
                           onDismiss:(DismissBlock) dismissed                   
                            onCancel:(CancelBlock) cancelled;
 
+- (void) show:(CancelBlock) cancelBlock onDismiss:(DismissBlock) dismissedBlock;
+
 @end
