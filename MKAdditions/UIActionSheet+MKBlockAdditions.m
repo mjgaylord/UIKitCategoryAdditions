@@ -68,14 +68,14 @@ static UIViewController *_presentVC;
 	
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:title
                                                              delegate:(id <UIActionSheetDelegate>)[self class]
-                                                    cancelButtonTitle:nil
+                                                    cancelButtonTitle:cancelButtonTitle
                                                destructiveButtonTitle:destructiveButtonTitle
                                                     otherButtonTitles:nil];
     
-    for(NSString* thisButtonTitle in buttonTitles)
+    for(NSString* thisButtonTitle in buttonTitles) {
         [actionSheet addButtonWithTitle:thisButtonTitle];
+	}
     
-    [actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
     actionSheet.cancelButtonIndex = [buttonTitles count];
     
     if(destructiveButtonTitle)
