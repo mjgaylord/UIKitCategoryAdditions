@@ -62,9 +62,9 @@ static CancelBlock _cancelBlock;
 
 + (void)alertView:(UIAlertView*) alertView didDismissWithButtonIndex:(NSInteger) buttonIndex {
     
-	if(buttonIndex == [alertView cancelButtonIndex]) {
+	if(buttonIndex == [alertView cancelButtonIndex] && _cancelBlock) {
 		_cancelBlock();
-	} else {
+	} else if (_dismissBlock) {
         _dismissBlock(buttonIndex - 1); // cancel button is button 0
 	}
     Block_release(_cancelBlock);
@@ -73,9 +73,9 @@ static CancelBlock _cancelBlock;
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-	if(buttonIndex == [alertView cancelButtonIndex]){
+	if(buttonIndex == [alertView cancelButtonIndex] && _cancelBlock){
 		_cancelBlock();
-	} else {
+	} else if (_dismissBlock) {
         _dismissBlock(buttonIndex - 1); // cancel button is button 0
     }
     
